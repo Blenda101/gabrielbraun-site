@@ -1,0 +1,4 @@
+# full-size originals; the page uses the copies in assets/slide-show/web
+assets/slide-show/*.png
+assets/slide-show/*.jpg
+assets/slide-show/web/_sheet.jpg

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gabriel Braun | Portfolio Entrepreneur &amp; Inventor</title>
+<meta name="description" content="Gabriel Braun is a portfolio entrepreneur and inventor. Founder of Poily, the GTM platform behind Doerfy, BigTopa, GoalGauntlet and Blending101. Data visualization and UI/UX design. 3 U.S. patents." />
+<meta property="og:title" content="Gabriel Braun | Portfolio Entrepreneur &amp; Inventor" />
+<meta property="og:description" content="Delicious UI/UX. Delectable data visualization. AI is the icing." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://gabrielbraun.com/assets/og-banner.png" />
+<meta property="og:url" content="https://gabrielbraun.com/" />
+<link rel="canonical" href="https://gabrielbraun.com/" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0c0a1c;
+    --bg-2: #131027;
+    --card: #17142c;
+    --line: #2a2647;
+    --text: #f4f3fb;
+    --muted: #a9a5c6;
+    --orange: #f97316;
+    --violet: #8b7cf6;
+    --green: #4fb84a;
+    --radius: 16px;
+    --max: 1080px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  header.nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(12, 10, 28, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { font-weight: 800; letter-spacing: -0.01em; text-decoration: none; font-size: 18px; }
+  .nav nav { display: flex; gap: 26px; }
+  .nav nav a { text-decoration: none; color: var(--muted); font-size: 15px; font-weight: 500; }
+  .nav nav a:hover, .nav nav a:focus-visible { color: var(--text); }
+
+  /* hero */
+  .hero {
+    padding: 88px 0 72px;
+    background:
+      radial-gradient(700px 380px at 12% 0%, rgba(139, 124, 246, 0.18), transparent 70%),
+      radial-gradient(600px 320px at 95% 20%, rgba(249, 115, 22, 0.10), transparent 70%);
+  }
+  .hero .wrap { display: grid; grid-template-columns: 1fr 260px; gap: 56px; align-items: center; }
+  .kicker {
+    color: var(--orange); font-size: 13px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 18px;
+  }
+  h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 20px; font-weight: 800; }
+  .lede { font-size: 20px; color: var(--muted); max-width: 36em; margin: 0 0 22px; }
+  .signature { font-size: 20px; font-weight: 600; margin: 0 0 32px; }
+  .signature span { color: var(--orange); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-block; padding: 13px 22px; border-radius: 999px;
+    font-weight: 600; font-size: 16px; text-decoration: none; border: 1px solid var(--line);
+  }
+  .btn.primary { background: var(--orange); border-color: var(--orange); color: #1a0d02; }
+  .btn:hover, .btn:focus-visible { border-color: var(--text); }
+  .portrait {
+    width: 260px; height: 260px; border-radius: 50%;
+    border: 2px solid var(--line); background: var(--card);
+    display: grid; place-items: center; overflow: hidden;
+    font-size: 72px; font-weight: 800; color: var(--violet); letter-spacing: -0.03em;
+  }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* sections */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .eyebrow { color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 10px; }
+  h2 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 16px; }
+  .intro { color: var(--muted); max-width: 44em; margin: 0 0 36px; }
+  h3 { font-size: 20px; margin: 0 0 8px; letter-spacing: -0.01em; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 26px;
+  }
+  .card p { color: var(--muted); margin: 0 0 16px; font-size: 16px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; }
+  .dot.o { background: var(--orange); } .dot.v { background: var(--violet); } .dot.g { background: var(--green); }
+  .links { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .links a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    text-decoration: none; padding: 10px 0; border-top: 1px solid var(--line); font-weight: 600; font-size: 16px;
+  }
+  .links a small { color: var(--muted); font-weight: 400; font-size: 14px; text-align: right; }
+  .links a:hover, .links a:focus-visible { color: var(--orange); }
+
+  .poily-tiles { margin: -8px 0 48px; }
+  .area { margin: 0 0 44px; }
+  .area:last-child { margin-bottom: 0; }
+  .area-head { max-width: 44em; margin: 0 0 18px; }
+  .area-head h3 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
+  .area-head p { color: var(--muted); margin: 0; font-size: 16px; }
+  .pin { width: 26px; height: 26px; flex: none; }
+  .pin.o { fill: var(--orange); } .pin.v { fill: var(--violet); } .pin.g { fill: var(--green); }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .tile {
+    display: block; text-decoration: none; background: var(--card);
+    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+    transition: border-color .15s, transform .15s;
+  }
+  .tile:hover, .tile:focus-visible { border-color: var(--orange); transform: translateY(-2px); }
+  .tile img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-bottom: 1px solid var(--line); }
+  .tile-body { display: block; padding: 14px 16px 16px; }
+  .tile-body strong { display: block; font-size: 16px; }
+  .tile-body small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+  @media (prefers-reduced-motion: reduce) { .tile { transition: none; } .tile:hover { transform: none; } }
+
+  .wide-photo { display: block; width: 100%; max-height: 380px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--line); margin: 0 0 22px; height: auto; }
+
+  .feature {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: stretch;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; text-decoration: none; margin: 0 0 20px; transition: border-color .15s;
+  }
+  .feature:hover, .feature:focus-visible { border-color: var(--orange); }
+  .feature img { display: block; width: 100%; height: 100%; min-height: 260px; object-fit: cover; }
+  .feature-body { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 32px 34px; }
+  .feature-kicker { font-size: 20px; font-weight: 700; margin: 0 0 10px; }
+  .feature .quote { display: block; }
+  .feature-desc { color: var(--muted); font-size: 16px; margin: 0 0 20px; }
+  .feature:hover .btn { border-color: var(--text); }
+
+  .slideshow { position: relative; margin-top: 8px; }
+  .slides {
+    list-style: none; margin: 0; padding: 0; display: flex; overflow-x: auto;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth; border-radius: 12px;
+    background: #000; scrollbar-width: none;
+  }
+  .slides::-webkit-scrollbar { display: none; }
+  .slides li { flex: 0 0 100%; scroll-snap-align: center; }
+  .slides img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #000; }
+  .slide-btn {
+    position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+    border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 10, 28, 0.8);
+    color: var(--text); font-size: 26px; line-height: 1; cursor: pointer;
+  }
+  .slide-btn:hover, .slide-btn:focus-visible { border-color: var(--orange); }
+  .slide-btn.prev { left: 12px; } .slide-btn.next { right: 12px; }
+  .slide-count { position: absolute; right: 14px; bottom: 12px; margin: 0 !important; padding: 3px 10px; border-radius: 999px; background: rgba(12, 10, 28, 0.8); font-size: 13px !important; color: var(--text) !important; }
+  @media (prefers-reduced-motion: reduce) { .slides { scroll-behavior: auto; } }
+
+  /* motion */
+  .hero { position: relative; overflow: hidden; }
+  .hero .wrap { position: relative; z-index: 1; }
+  .stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  .pin { transform-origin: 50% 90%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; transition-delay: var(--d, 0ms); }
+    .js .reveal.in { opacity: 1; transform: none; }
+    .js .tile.reveal.in:hover { transform: translateY(-2px); transition-delay: 0ms; }
+    .area.in .pin { animation: pin-drop .9s cubic-bezier(.3, 1.4, .5, 1) both; }
+    @keyframes pin-drop {
+      0% { transform: translateY(-14px) scale(.6); opacity: 0; }
+      60% { transform: translateY(0) scale(1.25); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+  }
+
+  .clients { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 28px; padding: 0; list-style: none; }
+  .clients li { border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 14px; color: var(--muted); }
+
+  .patent .num { color: var(--orange); font-weight: 700; font-size: 14px; letter-spacing: 0.06em; }
+  .patent a { font-weight: 600; font-size: 15px; }
+
+  .quote { font-size: 22px; line-height: 1.45; font-weight: 500; margin: 0 0 14px; }
+  .stat { font-size: 15px; color: var(--muted); }
+  .stat strong { color: var(--text); }
+
+  .contact { text-align: center; }
+  .contact .intro { margin-left: auto; margin-right: auto; }
+  .contact .cta { justify-content: center; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 860px) {
+    .nav nav { display: none; }
+    .hero { padding: 56px 0 48px; }
+    .hero .wrap { grid-template-columns: 1fr; gap: 32px; }
+    .portrait { width: 160px; height: 160px; font-size: 46px; order: -1; }
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .feature { grid-template-columns: 1fr; }
+    .feature img { min-height: 0; aspect-ratio: 16 / 10; }
+    .feature-body { padding: 24px; }
+    section { padding: 52px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Gabriel Braun</a>
+    <nav aria-label="Sections">
+      <a href="#portfolio">Portfolio</a>
+      <a href="#craft">Craft</a>
+      <a href="#patents">Patents</a>
+      <a href="#health">Health</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <canvas class="stars" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <p class="kicker">Portfolio Entrepreneur / Inventor / 3 U.S. Patents</p>
+        <h1>I design products, build them and take them to market.</h1>
+        <p class="lede">Founder of Poily, the go-to-market platform behind Doerfy, BigTopa, GoalGauntlet and Blending101. My craft is data visualization and UI/UX design, together.</p>
+        <p class="signature">Delicious UI/UX. Delectable data visualization. <span>AI is the icing.</span></p>
+        <div class="cta">
+          <a class="btn primary" href="#contact">Get in touch</a>
+          <a class="btn" href="#portfolio">See the portfolio</a>
+        </div>
+      </div>
+      <div class="portrait"><img src="assets/thumbs/gabriel-web.jpg" alt="Gabriel Braun" width="800" height="800" /></div>
+    </div>
+  </div>
+
+  <section id="portfolio">
+    <div class="wrap">
+      <p class="eyebrow">The Poily portfolio</p>
+      <h2>Three areas of interest</h2>
+      <p class="intro">Poily is short for points of interest, and it comes in two parts. The Poily platform covers the SaaS go-to-market points of interest for non-technical and AI-enabled developers. AI has made building a product easy. Getting it to market is still hard, and the Poily platform makes that easy too. The Poily portfolio is where we brand our own products, the ones we dogfood the platform on.</p>
+      <div class="tiles poily-tiles">
+        <a class="tile" href="https://poily.com" rel="noopener">
+          <img src="assets/thumbs/poily.jpg" alt="Poily SaaS GTM website" loading="lazy" width="640" height="400" />
+          <span class="tile-body"><strong>Poily SaaS GTM</strong><small>The go-to-market platform</small></span>
+        </a>
+        <a class="tile" href="https://poily.com/universe" rel="noopener">
+          <img src="assets/thumbs/poily-universe.jpg" alt="Poily Portfolio website" loading="lazy" width="640" height="400" />
+          <span class="tile-body"><strong>Poily Portfolio</strong><small>The Poily Universe</small></span>
+        </a>
+      </div>
+
+      <div class="area">
+        <div class="area-head">
+          <h3><svg class="pin o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Productivity &amp; life hacking</h3>
+          <p>A life-design system: a persistent AI coach, a framework with the tools to execute it, and a practice that compounds over time. Two free tools let you start today.</p>
+        </div>
+        <div class="tiles">
+          <a class="tile" href="https://doerfy.com" rel="noopener">
+            <img src="assets/thumbs/doerfy.jpg" alt="Doerfy website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Doerfy</strong><small>Design. Visualize. Do.</small></span>
+          </a>
+          <a class="tile" href="https://mywheeloflife.com/" rel="noopener">
+            <img src="assets/thumbs/mywheeloflife.jpg" alt="Wheel of Life website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Wheel of Life</strong><small>Free life-balance assessment</small></span>
+          </a>
+          <a class="tile" href="https://eatanelephant.co/" rel="noopener">
+            <img src="assets/thumbs/eatanelephant.jpg" alt="Elephant Bites website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Elephant Bites</strong><small>Free focus timer</small></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="area">
+        <div class="area-head">
+          <h3><svg class="pin v" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Building digital &amp; IRL communities</h3>
+          <p>An engagement, marketing and monetization platform for building communities online and in real life. We take it to market one vertical at a time, with more to come.</p>
+        </div>
+        <div class="tiles">
+          <a class="tile" href="https://bigtopa.com" rel="noopener">
+            <img src="assets/thumbs/bigtopa.jpg" alt="BigTopa website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>BigTopa</strong><small>The platform</small></span>
+          </a>
+          <a class="tile" href="https://alumnihub.co" rel="noopener">
+            <img src="assets/thumbs/alumnihub.jpg" alt="AlumniHub website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>AlumniHub</strong><small>Alumni associations</small></span>
+          </a>
+          <a class="tile" href="https://greekhouse.io" rel="noopener">
+            <img src="assets/thumbs/greekhouse.jpg" alt="GreekHouse website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>GreekHouse</strong><small>Greek organizations</small></span>
+          </a>
+          <a class="tile" href="https://gatheragain.co" rel="noopener">
+            <img src="assets/thumbs/gatheragain.jpg" alt="GatherAgain website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>GatherAgain</strong><small>Reunions</small></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="area">
+        <div class="area-head">
+          <h3><svg class="pin g" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Health &amp; wellness</h3>
+          <p>Products that help people take charge of their own health: what you eat, the habits you keep and how you train.</p>
+        </div>
+        <div class="tiles">
+          <a class="tile" href="https://blending101.com" rel="noopener">
+            <img src="assets/thumbs/blending101.jpg" alt="Blending101 website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Blending101</strong><small>The art and science of blending</small></span>
+          </a>
+          <a class="tile" href="assets/Content/blending101_guide.jpg">
+            <img src="assets/thumbs/blending-guide.jpg" alt="Blending 101 ingredients and formulas guide" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Free Blending Guide</strong><small>Ingredients and formulas</small></span>
+          </a>
+          <a class="tile" href="https://goalgauntlet.com" rel="noopener">
+            <img src="assets/thumbs/goalgauntlet.jpg" alt="GoalGauntlet website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>GoalGauntlet</strong><small>Group fitness challenges</small></span>
+          </a>
+          <a class="tile" href="https://plantmilkmakers.com" rel="noopener">
+            <img src="assets/thumbs/plantmilkmakers.jpg" alt="Plant Milk Makers website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Plant Milk Makers</strong><small>Coming soon</small></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="craft">
+    <div class="wrap">
+      <p class="eyebrow">Craft</p>
+      <h2>Data visualization and UI/UX design, in one person</h2>
+      <p class="intro">Data visualization makes information clear. UI/UX design makes it usable. For nearly 20 years I have brought the two together to build visually digestible data products people come back to. I add AI to products that are already good without it.</p>
+
+      <ul class="clients" aria-label="Organizations I have worked with">
+        <li>Intermountain Health</li>
+        <li>Nestlé Purina</li>
+        <li>TE Connectivity</li>
+        <li>Shionogi</li>
+        <li>UCB</li>
+        <li>Stiefel</li>
+      </ul>
+
+      <div class="tiles">
+          <a class="tile" href="https://www.youtube.com/watch?v=OXhK2qQgHyY" rel="noopener">
+            <img src="assets/thumbs/reel.jpg" alt="Portfolio reel website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Portfolio reel</strong><small>Dashboards, data stories and product design</small></span>
+          </a>
+          <a class="tile" href="https://cancer-deaths.vercel.app" rel="noopener">
+            <img src="assets/thumbs/cancer-story.jpg" alt="Cancer data story website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Cancer data story</strong><small>Interactive: incidence and deaths</small></span>
+          </a>
+          <a class="tile" href="https://disease-deaths.vercel.app" rel="noopener">
+            <img src="assets/thumbs/disease-story.jpg" alt="Chronic disease data story website" loading="lazy" width="640" height="400" />
+            <span class="tile-body"><strong>Chronic disease data story</strong><small>Interactive: across the United States</small></span>
+          </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="patents">
+    <div class="wrap">
+      <p class="eyebrow">Inventor</p>
+      <h2>Three U.S. patents, granted in 2025</h2>
+      <p class="intro">One utility patent and two design patents.</p>
+      <img class="wide-photo" src="assets/patents.jpg" alt="Three United States patent certificates" loading="lazy" width="1400" height="788" />
+
+      <div class="grid-3">
+        <div class="card patent">
+          <p class="num">US 12,402,741 B2 &middot; UTILITY</p>
+          <h3>Plant milk and juice strainer</h3>
+          <p>The 3D Strainer, now in development as a plant milk maker.</p>
+          <a href="https://patents.google.com/patent/US12402741B2/en" rel="noopener">View the patent</a>
+        </div>
+        <div class="card patent">
+          <p class="num">US D1,079,725 &middot; DESIGN</p>
+          <h3>30-day habit-progress interface</h3>
+          <p>A display interface for tracking progress through blending and other 30-day challenges.</p>
+          <a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/D1079725" rel="noopener">View the patent (PDF)</a>
+        </div>
+        <div class="card patent">
+          <p class="num">US D1,092,550 &middot; DESIGN</p>
+          <h3>30-day habit-progress interface</h3>
+          <p>A second design covering the habit-progress interface.</p>
+          <a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/D1092550" rel="noopener">View the patent (PDF)</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="health">
+    <div class="wrap">
+      <p class="eyebrow">Health &amp; wellness</p>
+      <h2>The area I am most passionate about</h2>
+      <p class="intro">I have been hacking health and fitness optimization my entire adult life, and sharing what works with anyone who would listen. What you eat, the habits you keep and how you train your body do more to determine your health than anything else.</p>
+
+      <a class="feature" href="assets/Content/Manifesto-2026_1.pdf">
+        <img src="assets/thumbs/Healthcare_Manifesto_tbn.jpg" alt="Cover of the Healthcare Manifesto" loading="lazy" width="450" height="282" />
+        <span class="feature-body">
+          <span class="feature-kicker">The Healthcare Manifesto</span>
+          <span class="quote">A problem of this magnitude demands a seismic shift in the collective values we bring to solving it.</span>
+          <span class="feature-desc">A first-principles reflection on the depth of the problems we face in taking on the healthcare crisis.</span>
+          <span class="btn">Read the manifesto</span>
+        </span>
+      </a>
+
+      <div class="card practice">
+        <h3>Practice</h3>
+        <p class="quote">2024 USAPL Masters Raw (Tested) Bench Press National Champion</p>
+        <p>I train and compete at a high level to demonstrate the symbiotic relationship between food and fitness. I return to competition in 2027 with a coach and my eyes on the national record.</p>
+        <div class="slideshow" role="region" aria-label="Competition photos">
+          <ul class="slides" tabindex="0">
+              <li><img src="assets/slide-show/web/videoframe-2992108.jpg" alt="Gabriel Braun benching at a USA Powerlifting national meet" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/image-501.jpg" alt="Close view of the bar during a competition bench press" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/videoframe-1642052.jpg" alt="Setting up under the bar on the competition platform" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/image-501tt.jpg" alt="Spotters and loaders around the competition bench" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/group-2725.jpg" alt="Gabriel Braun with competition medals" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/frame-1171275567.jpg" alt="Bench press at a local competition" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/img-7122.jpg" alt="On the platform at a Jacksonville meet" loading="lazy" width="1280" height="720" /></li>
+              <li><img src="assets/slide-show/web/bench-1.jpg" alt="Bench press attempt at a state meet" loading="lazy" width="1280" height="720" /></li>
+          </ul>
+          <button class="slide-btn prev" type="button" aria-label="Previous photo">&#8249;</button>
+          <button class="slide-btn next" type="button" aria-label="Next photo">&#8250;</button>
+          <p class="slide-count" aria-live="polite">1 / 8</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2>I'm a digital dreamer who ships.</h2>
+      <p class="intro">If you are an investor, a partner, an organization that wants to engage on any of my points of interest, or a team that needs data visualization and UI/UX design, I'd like to hear from you.</p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:gabriel@poily.com">gabriel@poily.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/gabrielbraun/" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Gabriel Braun. Jacksonville, Florida.</span>
+    <span>Poily: points of interest.</span>
+  </div>
+</footer>
+<script>
+  document.querySelectorAll('.slideshow').forEach(function (show) {
+    var track = show.querySelector('.slides');
+    var count = show.querySelector('.slide-count');
+    var total = track.children.length;
+    function index() { return Math.round(track.scrollLeft / track.clientWidth); }
+    function go(i) { track.scrollTo({ left: ((i + total) % total) * track.clientWidth }); }
+    show.querySelector('.prev').addEventListener('click', function () { go(index() - 1); });
+    show.querySelector('.next').addEventListener('click', function () { go(index() + 1); });
+    track.addEventListener('scroll', function () { count.textContent = (index() + 1) + ' / ' + total; });
+    track.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(index() - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(index() + 1); }
+    });
+  });
+</script>
+<script>
+  document.documentElement.classList.add('js');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* scroll reveal + pin drop */
+  (function () {
+    var items = document.querySelectorAll('.tile, .card, .feature, .wide-photo');
+    var areas = document.querySelectorAll('.area');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      areas.forEach(function (a) { a.classList.add('in'); });
+      return;
+    }
+    items.forEach(function (el) {
+      el.classList.add('reveal');
+      var sibs = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty('--d', Math.min(sibs, 4) * 70 + 'ms');
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (el) { io.observe(el); });
+    areas.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* hero constellation: points of interest */
+  (function () {
+    var canvas = document.querySelector('.stars');
+    if (!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext('2d');
+    var hero = canvas.parentNode;
+    var pts = [], w = 0, h = 0, raf = 0, visible = true;
+    var COLORS = ['#f97316', '#8b7cf6', '#4fb84a'];
+
+    function size() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = hero.clientWidth; h = hero.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.round(Math.min(70, Math.max(24, (w * h) / 16000)));
+      pts = [];
+      for (var i = 0; i < n; i++) {
+        var poi = i < 6;
+        pts.push({
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.16, vy: (Math.random() - 0.5) * 0.16,
+          r: poi ? 2.6 : 1 + Math.random() * 0.8,
+          c: poi ? COLORS[i % 3] : 'rgba(169,165,198,0.55)',
+          poi: poi, ph: Math.random() * 6.28
+        });
+      }
+    }
+
+    function draw(t) {
+      ctx.clearRect(0, 0, w, h);
+      var i, j, a, b, dx, dy, d, max = 130;
+      for (i = 0; i < pts.length; i++) {
+        a = pts[i];
+        if (!reduceMotion) {
+          a.x += a.vx; a.y += a.vy;
+          if (a.x < -10) a.x = w + 10; if (a.x > w + 10) a.x = -10;
+          if (a.y < -10) a.y = h + 10; if (a.y > h + 10) a.y = -10;
+        }
+        for (j = i + 1; j < pts.length; j++) {
+          b = pts[j]; dx = a.x - b.x; dy = a.y - b.y; d = Math.sqrt(dx * dx + dy * dy);
+          if (d < max) {
+            ctx.strokeStyle = 'rgba(139,124,246,' + (0.16 * (1 - d / max)).toFixed(3) + ')';
+            ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+      for (i = 0; i < pts.length; i++) {
+        a = pts[i];
+        if (a.poi) {
+          var glow = 7 + Math.sin((t || 0) / 900 + a.ph) * 3;
+          ctx.globalAlpha = 0.18; ctx.fillStyle = a.c;
+          ctx.beginPath(); ctx.arc(a.x, a.y, glow, 0, 6.2832); ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        ctx.fillStyle = a.c; ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
+      }
+      if (!reduceMotion && visible) raf = requestAnimationFrame(draw);
+    }
+
+    size(); draw(0);
+    var timer;
+    window.addEventListener('resize', function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () { cancelAnimationFrame(raf); size(); draw(0); }, 150);
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) {
+        var now = e[0].isIntersecting;
+        if (now && !visible) { visible = true; cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }
+        visible = now;
+      }).observe(hero);
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { cancelAnimationFrame(raf); }
+      else if (visible && !reduceMotion) { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }
+    });
+  })();
+</script>
+
+</body>
+</html>
