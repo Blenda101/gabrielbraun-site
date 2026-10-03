@@ -9,6 +9,9 @@
 <meta property="og:description" content="Delicious UI/UX. Delectable data visualization. AI is the icing." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://gabrielbraun.com/assets/og-banner.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta property="og:url" content="https://gabrielbraun.com/" />
 <link rel="canonical" href="https://gabrielbraun.com/" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,7 +27,8 @@
     --muted: #a9a5c6;
     --orange: #f97316;
     --violet: #8b7cf6;
-    --green: #4fb84a;
+    --green: #2fc98e;
+    --red: #f0476a;
     --radius: 16px;
     --max: 1080px;
   }
@@ -117,7 +121,7 @@
   .area-head h3 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
   .area-head p { color: var(--muted); margin: 0; font-size: 16px; }
   .pin { width: 26px; height: 26px; flex: none; }
-  .pin.o { fill: var(--orange); } .pin.v { fill: var(--violet); } .pin.g { fill: var(--green); }
+  .pin.o { fill: var(--orange); } .pin.v { fill: var(--violet); } .pin.g { fill: var(--green); } .pin.r { fill: var(--red); }
   .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   .tile {
     display: block; text-decoration: none; background: var(--card);
@@ -265,7 +269,7 @@
 
       <div class="area">
         <div class="area-head">
-          <h3><svg class="pin o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Productivity &amp; life hacking</h3>
+          <h3><svg class="pin g" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Productivity &amp; life hacking</h3>
           <p>A life-design system: a persistent AI coach, a framework with the tools to execute it, and a practice that compounds over time. Two free tools let you start today.</p>
         </div>
         <div class="tiles">
@@ -286,7 +290,7 @@
 
       <div class="area">
         <div class="area-head">
-          <h3><svg class="pin v" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Building digital &amp; IRL communities</h3>
+          <h3><svg class="pin o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Building digital &amp; IRL communities</h3>
           <p>An engagement, marketing and monetization platform for building communities online and in real life. We take it to market one vertical at a time, with more to come.</p>
         </div>
         <div class="tiles">
@@ -311,7 +315,7 @@
 
       <div class="area">
         <div class="area-head">
-          <h3><svg class="pin g" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Health &amp; wellness</h3>
+          <h3><svg class="pin r" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Health &amp; wellness</h3>
           <p>Products that help people take charge of their own health: what you eat, the habits you keep and how you train.</p>
         </div>
         <div class="tiles">
@@ -506,7 +510,7 @@
     var ctx = canvas.getContext('2d');
     var hero = canvas.parentNode;
     var pts = [], w = 0, h = 0, raf = 0, visible = true;
-    var COLORS = ['#f97316', '#8b7cf6', '#4fb84a'];
+    var COLORS = ['#f97316', '#8b7cf6', '#2fc98e', '#f0476a'];
 
     function size() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -516,12 +520,12 @@
       var n = Math.round(Math.min(70, Math.max(24, (w * h) / 16000)));
       pts = [];
       for (var i = 0; i < n; i++) {
-        var poi = i < 6;
+        var poi = i < 8;
         pts.push({
           x: Math.random() * w, y: Math.random() * h,
           vx: (Math.random() - 0.5) * 0.16, vy: (Math.random() - 0.5) * 0.16,
           r: poi ? 2.6 : 1 + Math.random() * 0.8,
-          c: poi ? COLORS[i % 3] : 'rgba(169,165,198,0.55)',
+          c: poi ? COLORS[i % 4] : 'rgba(169,165,198,0.55)',
           poi: poi, ph: Math.random() * 6.28
         });
       }
