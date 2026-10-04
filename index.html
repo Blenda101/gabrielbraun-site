@@ -121,6 +121,8 @@
   .area-head h3 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
   .area-head p { color: var(--muted); margin: 0; font-size: 16px; }
   .area-head p.dna { color: var(--text, inherit); font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+  .dna-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; line-height: 1; padding: 4px 7px 3px; margin-right: 10px; border: 1px solid currentColor; border-radius: 5px; vertical-align: 2px; }
+  .dna-badge.g { color: var(--green); } .dna-badge.o { color: var(--orange); } .dna-badge.r { color: var(--red); }
   .pin { width: 26px; height: 26px; flex: none; }
   .pin.o { fill: var(--orange); } .pin.v { fill: var(--violet); } .pin.g { fill: var(--green); } .pin.r { fill: var(--red); }
   .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
@@ -279,7 +281,7 @@
       <div class="area">
         <div class="area-head">
           <h3><svg class="pin g" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Productivity &amp; life hacking</h3>
-          <p class="dna">Design, visualize and do the life you truly desire.</p>
+          <p class="dna"><span class="dna-badge g">DNA</span>Design, visualize and do the life you truly desire.</p>
           <p>A life-design system: a persistent AI coach, a framework with the tools to execute it, and a practice that compounds over time. Two free tools let you start today.</p>
         </div>
         <div class="tiles">
@@ -301,7 +303,7 @@
       <div class="area">
         <div class="area-head">
           <h3><svg class="pin o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Building digital &amp; IRL communities</h3>
-          <p class="dna">Less friction and fragmentation. More fit and flow.</p>
+          <p class="dna"><span class="dna-badge o">DNA</span>Less friction and fragmentation. More fit and flow.</p>
           <p>An engagement, marketing and monetization platform for building communities online and in real life. We take it to market one vertical at a time, with more to come.</p>
         </div>
         <div class="tiles">
@@ -327,7 +329,7 @@
       <div class="area">
         <div class="area-head">
           <h3><svg class="pin r" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Health &amp; wellness</h3>
-          <p class="dna">Get more life in your years.</p>
+          <p class="dna"><span class="dna-badge r">DNA</span>Get more life in your years.</p>
           <p>Products that help people take charge of their own health: what you eat, the habits you keep and how you train.</p>
         </div>
         <div class="tiles">
