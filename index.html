@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gabriel Braun | Portfolio Entrepreneur &amp; Inventor</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="description" content="Gabriel Braun is a portfolio entrepreneur and inventor. Founder of Poily, the GTM platform behind Doerfy, BigTopa, GoalGauntlet and Blending101. Data visualization and UI/UX design. 3 U.S. patents." />
 <meta property="og:title" content="Gabriel Braun | Portfolio Entrepreneur &amp; Inventor" />
 <meta property="og:description" content="Delicious UI/UX. Delectable data visualization. AI is the icing." />
@@ -587,8 +590,8 @@
 
     // orbits pass behind the text, dimmed there so the copy stays readable
     var DIM = 0.32;
-    function textRegion() {
-      ctx.beginPath();
+    function textRegion(keepPath) {
+      if (!keepPath) ctx.beginPath();
       if (mobile) ctx.rect(-50, textEdge - 6, w + 100, h);
       else ctx.rect(-50, -50, textEdge + 62, h + 100);
     }
@@ -640,7 +643,7 @@
       for (pass = 0; pass < 2; pass++) {
         ctx.save();
         if (pass === 1) { textRegion(); ctx.clip(); }
-        else { ctx.beginPath(); ctx.rect(-50, -50, w + 100, h + 100); textRegion(); ctx.clip('evenodd'); }
+        else { ctx.beginPath(); ctx.rect(-50, -50, w + 100, h + 100); textRegion(true); ctx.clip('evenodd'); }
         for (i = 0; i < orbits.length; i++) {
           o = orbits[i];
           ctx.strokeStyle = hexA(o.c, pass ? 0.08 : 0.24);
