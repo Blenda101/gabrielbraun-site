@@ -518,49 +518,41 @@
     areas.forEach(function (el) { io.observe(el); });
   })();
 
-  /* hero constellation: points of interest */
+  /* hero constellation: points of interest orbiting the portrait */
   (function () {
     var canvas = document.querySelector('.stars');
     if (!canvas || !canvas.getContext) return;
     var ctx = canvas.getContext('2d');
     var hero = canvas.parentNode;
     var portrait = hero.querySelector('.portrait');
-    var stars = [], anchors = [], w = 0, h = 0, raf = 0, visible = true, mobile = false;
+    var copy = hero.querySelector('.wrap > div');
+    var stars = [], orbits = [], w = 0, h = 0, raf = 0, visible = true, mobile = false;
+    var cx = 0, cy = 0, R = 80, textEdge = 0;
     var PIN = 'M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z';
     var pinPath = window.Path2D ? new Path2D(PIN) : null;
-    // Poily at the centre, the three brand families around it (same colours as the section pins).
+    // Poily on the inner orbit, the three brand families further out (same colours as the section pins).
+    // a0 = starting angle, chosen so the still frame (reduced motion) sits clear of the text.
     var DEFS = [
-      { id: 'poily', c: '#8b7cf6', hub: true },
-      { id: 'productivity', c: '#2fc98e' },
-      { id: 'community', c: '#f97316' },
-      { id: 'health', c: '#f0476a' }
+      { c: '#8b7cf6', hub: true, k: 0.32, sq: 0.82, v: 1.00, a0: -0.55 },
+      { c: '#2fc98e', k: 0.62, sq: 0.74, v: 0.72, a0: -1.45 },
+      { c: '#f97316', k: 0.95, sq: 0.66, v: 0.55, a0: 0.15 },
+      { c: '#f0476a', k: 1.30, sq: 0.60, v: 0.42, a0: 1.05 }
     ];
 
-    function place() {
+    function measure() {
       var hr = hero.getBoundingClientRect();
-      var pr = portrait ? portrait.getBoundingClientRect() : { left: w - 200, top: h / 2 - 80, width: 160, height: 160 };
-      var cx = pr.left - hr.left + pr.width / 2, cy = pr.top - hr.top + pr.height / 2, R = pr.width / 2;
-      var pos;
-      if (mobile) {
-        // empty band to the right of the photo
-        var x0 = cx + R + 22, x1 = w - 22, zw = Math.max(x1 - x0, 90), zx = x0 + zw / 2;
-        pos = [
-          [zx + zw * 0.05, cy],
-          [zx - zw * 0.28, cy - R * 0.62],
-          [zx + zw * 0.36, cy - R * 0.38],
-          [zx + zw * 0.12, cy + R * 0.72]
-        ];
-      } else {
-        // around the photo, never toward the text column on the left
-        function at(ang, dist) { return [cx + Math.cos(ang) * dist, cy + Math.sin(ang) * dist]; }
-        pos = [at(-0.15, R + 120), at(-1.3, R + 52), at(0.35, R + 46), at(1.25, R + 60)];
+      if (portrait) {
+        var pr = portrait.getBoundingClientRect();
+        cx = pr.left - hr.left + pr.width / 2; cy = pr.top - hr.top + pr.height / 2; R = pr.width / 2;
+      } else { cx = w * 0.75; cy = h / 2; R = 100; }
+      if (copy) {
+        var tr = copy.getBoundingClientRect();
+        // desktop: text sits left of the photo; mobile: text starts below it
+        textEdge = mobile ? (tr.top - hr.top) : (tr.right - hr.left);
       }
-      anchors = DEFS.map(function (d, i) {
-        return {
-          c: d.c, hub: !!d.hub,
-          x: Math.min(Math.max(pos[i][0], 24), w - 24), y: Math.min(Math.max(pos[i][1], 30), h - 24),
-          ph: i * 1.7
-        };
+      orbits = DEFS.map(function (d) {
+        var rx = R + (mobile ? 26 : 40) + d.k * (mobile ? 90 : 110);
+        return { c: d.c, hub: !!d.hub, rx: rx, ry: rx * (mobile ? d.sq * 0.62 : d.sq), tilt: mobile ? -0.12 : -0.28, v: d.v, a0: d.a0 };
       });
     }
 
@@ -578,12 +570,24 @@
           r: 1 + Math.random() * 1.1, a: 0.45 + Math.random() * 0.4
         });
       }
-      place();
+      measure();
     }
 
     function hexA(hex, a) {
       var n = parseInt(hex.slice(1), 16);
       return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    }
+
+    // keep the orbits out of the reading area: clip and fade toward the text
+    function clipToFree() {
+      ctx.beginPath();
+      if (mobile) ctx.rect(-50, -50, w + 100, textEdge - 6 + 50);
+      else ctx.rect(textEdge + 12, -50, w - textEdge + 50, h + 100);
+      ctx.clip();
+    }
+    function fade(x, y) {
+      var d = mobile ? (textEdge - 6 - y) : (x - textEdge - 12);
+      return Math.max(0, Math.min(1, d / 46));
     }
 
     function drawPin(x, y, s, col) {
@@ -601,7 +605,6 @@
       t = t || 0;
       ctx.clearRect(0, 0, w, h);
       var i, j, a, b, dx, dy, d, max = 130;
-      // background stars and their faint links
       for (i = 0; i < stars.length; i++) {
         a = stars[i];
         if (!reduceMotion) {
@@ -622,36 +625,45 @@
         ctx.fillStyle = 'rgba(190,186,220,' + a.a.toFixed(2) + ')';
         ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
       }
-      // points of interest: positions bob gently
-      var P = anchors.map(function (n) {
-        var k = reduceMotion ? 0 : 1;
-        return { c: n.c, hub: n.hub, x: n.x + k * Math.sin(t / 2600 + n.ph) * 5, y: n.y + k * Math.cos(t / 3100 + n.ph) * 5, ph: n.ph };
-      });
-      var hub = P[0];
-      for (i = 1; i < P.length; i++) {
-        var g = ctx.createLinearGradient(P[i].x, P[i].y, hub.x, hub.y);
-        g.addColorStop(0, hexA(P[i].c, 0.75)); g.addColorStop(1, hexA(hub.c, 0.75));
-        ctx.strokeStyle = g; ctx.lineWidth = mobile ? 1.2 : 1.5;
-        ctx.beginPath(); ctx.moveTo(P[i].x, P[i].y - (mobile ? 9 : 12)); ctx.lineTo(hub.x, hub.y); ctx.stroke();
+
+      ctx.save();
+      clipToFree();
+      // orbit rings, like the Poily Universe; they pass behind the photo
+      ctx.setLineDash([3, 6]); ctx.lineWidth = 1;
+      for (i = 0; i < orbits.length; i++) {
+        var o = orbits[i];
+        ctx.strokeStyle = hexA(o.c, 0.22);
+        ctx.beginPath(); ctx.ellipse(cx, cy, o.rx, o.ry, o.tilt, 0, 6.2832); ctx.stroke();
       }
-      var s = mobile ? 0.95 : 1.25;
-      for (i = 0; i < P.length; i++) {
-        a = P[i];
-        var pulse = 1 + (reduceMotion ? 0 : Math.sin(t / 900 + a.ph) * 0.12);
-        var gr = (a.hub ? (mobile ? 26 : 34) : (mobile ? 18 : 24)) * pulse;
-        var gy = a.hub ? a.y : a.y - 10 * s;
-        var rg = ctx.createRadialGradient(a.x, gy, 0, a.x, gy, gr);
-        rg.addColorStop(0, hexA(a.c, 0.55)); rg.addColorStop(1, hexA(a.c, 0));
-        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(a.x, gy, gr, 0, 6.2832); ctx.fill();
-        if (a.hub) {
+      ctx.setLineDash([]);
+      // one revolution of the inner orbit takes about 45 seconds
+      var s = mobile ? 0.95 : 1.25, spin = reduceMotion ? 0 : t / 45000 * 6.2832;
+      for (i = 0; i < orbits.length; i++) {
+        o = orbits[i];
+        var ang = o.a0 + spin * o.v;
+        var lx = Math.cos(ang) * o.rx, ly = Math.sin(ang) * o.ry;
+        var x = cx + lx * Math.cos(o.tilt) - ly * Math.sin(o.tilt);
+        var y = cy + lx * Math.sin(o.tilt) + ly * Math.cos(o.tilt);
+        var f = fade(x, y);
+        if (f <= 0) continue;
+        ctx.globalAlpha = f;
+        var pulse = 1 + (reduceMotion ? 0 : Math.sin(t / 900 + i * 1.7) * 0.12);
+        var gr = (o.hub ? (mobile ? 26 : 34) : (mobile ? 18 : 24)) * pulse;
+        var gy = o.hub ? y : y - 10 * s;
+        var rg = ctx.createRadialGradient(x, gy, 0, x, gy, gr);
+        rg.addColorStop(0, hexA(o.c, 0.55)); rg.addColorStop(1, hexA(o.c, 0));
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(x, gy, gr, 0, 6.2832); ctx.fill();
+        if (o.hub) {
           var r = mobile ? 9 : 12;
-          var sg = ctx.createRadialGradient(a.x - r * 0.35, a.y - r * 0.35, 1, a.x, a.y, r);
-          sg.addColorStop(0, '#d9d2ff'); sg.addColorStop(1, a.c);
-          ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(a.x, a.y, r, 0, 6.2832); ctx.fill();
+          var sg = ctx.createRadialGradient(x - r * 0.35, y - r * 0.35, 1, x, y, r);
+          sg.addColorStop(0, '#d9d2ff'); sg.addColorStop(1, o.c);
+          ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
         } else {
-          drawPin(a.x, a.y, s, a.c);
+          drawPin(x, y, s, o.c);
         }
+        ctx.globalAlpha = 1;
       }
+      ctx.restore();
       if (!reduceMotion && visible) raf = requestAnimationFrame(draw);
     }
 
@@ -659,9 +671,9 @@
     var timer;
     window.addEventListener('resize', function () {
       clearTimeout(timer);
-      timer = setTimeout(function () { cancelAnimationFrame(raf); size(); draw(0); }, 150);
+      timer = setTimeout(function () { cancelAnimationFrame(raf); size(); draw(performance.now()); }, 150);
     });
-    window.addEventListener('load', function () { place(); if (reduceMotion) draw(0); });
+    window.addEventListener('load', function () { measure(); if (reduceMotion) draw(0); });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (e) {
         var now = e[0].isIntersecting;
