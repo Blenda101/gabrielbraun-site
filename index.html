@@ -66,7 +66,8 @@
       radial-gradient(700px 380px at 12% 0%, rgba(139, 124, 246, 0.18), transparent 70%),
       radial-gradient(600px 320px at 95% 20%, rgba(249, 115, 22, 0.10), transparent 70%);
   }
-  .hero .wrap { display: grid; grid-template-columns: 1fr 260px; gap: 56px; align-items: center; }
+  .hero .wrap { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; align-items: center; }
+  .hero .portrait { justify-self: center; }
   .kicker {
     color: var(--orange); font-size: 13px; font-weight: 700;
     letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 18px;
@@ -211,6 +212,7 @@
     .hero { padding: 56px 0 48px; }
     .hero .wrap { grid-template-columns: 1fr; gap: 32px; }
     .portrait { width: 160px; height: 160px; font-size: 46px; order: -1; }
+    .hero .portrait { margin: 8px auto 28px; }
     .grid-3, .grid-2 { grid-template-columns: 1fr; }
     .tiles { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .feature { grid-template-columns: 1fr; }
@@ -551,8 +553,13 @@
         textEdge = mobile ? (tr.top - hr.top) : (tr.right - hr.left);
       }
       orbits = DEFS.map(function (d) {
-        var rx = R + (mobile ? 26 : 40) + d.k * (mobile ? 90 : 110);
-        return { c: d.c, hub: !!d.hub, rx: rx, ry: rx * (mobile ? d.sq * 0.62 : d.sq), tilt: mobile ? -0.12 : -0.28, v: d.v, a0: d.a0 };
+        if (mobile) {
+          // ellipses that always stay outside the photo (pins sit above their point, so allow for that)
+          var gap = d.hub ? 24 : 36;
+          return { c: d.c, hub: !!d.hub, rx: R + gap + d.k * 105, ry: R + gap + d.k * 38, tilt: 0, v: d.v, a0: d.a0 };
+        }
+        var rx = R + 40 + d.k * 110;
+        return { c: d.c, hub: !!d.hub, rx: rx, ry: rx * d.sq, tilt: -0.28, v: d.v, a0: d.a0 };
       });
     }
 
@@ -578,16 +585,16 @@
       return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
     }
 
-    // keep the orbits out of the reading area: clip and fade toward the text
-    function clipToFree() {
+    // orbits pass behind the text, dimmed there so the copy stays readable
+    var DIM = 0.32;
+    function textRegion() {
       ctx.beginPath();
-      if (mobile) ctx.rect(-50, -50, w + 100, textEdge - 6 + 50);
-      else ctx.rect(textEdge + 12, -50, w - textEdge + 50, h + 100);
-      ctx.clip();
+      if (mobile) ctx.rect(-50, textEdge - 6, w + 100, h);
+      else ctx.rect(-50, -50, textEdge + 62, h + 100);
     }
     function fade(x, y) {
       var d = mobile ? (textEdge - 6 - y) : (x - textEdge - 12);
-      return Math.max(0, Math.min(1, d / 46));
+      return DIM + (1 - DIM) * Math.max(0, Math.min(1, d / 46));
     }
 
     function drawPin(x, y, s, col) {
@@ -627,13 +634,19 @@
       }
 
       ctx.save();
-      clipToFree();
-      // orbit rings, like the Poily Universe; they pass behind the photo
+      // orbit rings, like the Poily Universe: full strength in the open, faint behind the text
       ctx.setLineDash([3, 6]); ctx.lineWidth = 1;
-      for (i = 0; i < orbits.length; i++) {
-        var o = orbits[i];
-        ctx.strokeStyle = hexA(o.c, 0.22);
-        ctx.beginPath(); ctx.ellipse(cx, cy, o.rx, o.ry, o.tilt, 0, 6.2832); ctx.stroke();
+      var o, pass;
+      for (pass = 0; pass < 2; pass++) {
+        ctx.save();
+        if (pass === 1) { textRegion(); ctx.clip(); }
+        else { ctx.beginPath(); ctx.rect(-50, -50, w + 100, h + 100); textRegion(); ctx.clip('evenodd'); }
+        for (i = 0; i < orbits.length; i++) {
+          o = orbits[i];
+          ctx.strokeStyle = hexA(o.c, pass ? 0.08 : 0.24);
+          ctx.beginPath(); ctx.ellipse(cx, cy, o.rx, o.ry, o.tilt, 0, 6.2832); ctx.stroke();
+        }
+        ctx.restore();
       }
       ctx.setLineDash([]);
       // one revolution of the inner orbit takes about 45 seconds
@@ -645,7 +658,6 @@
         var x = cx + lx * Math.cos(o.tilt) - ly * Math.sin(o.tilt);
         var y = cy + lx * Math.sin(o.tilt) + ly * Math.cos(o.tilt);
         var f = fade(x, y);
-        if (f <= 0) continue;
         ctx.globalAlpha = f;
         var pulse = 1 + (reduceMotion ? 0 : Math.sin(t / 900 + i * 1.7) * 0.12);
         var gr = (o.hub ? (mobile ? 26 : 34) : (mobile ? 18 : 24)) * pulse;
