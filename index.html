@@ -241,7 +241,7 @@
     <canvas class="stars" aria-hidden="true"></canvas>
     <div class="wrap">
       <div>
-        <p class="kicker">Portfolio Entrepreneur / Inventor / 3 U.S. Patents</p>
+        <p class="kicker">Portfolio Entrepreneur / Inventor / 3&nbsp;U.S.&nbsp;Patents</p>
         <h1>I design products, build them and take them to market.</h1>
         <p class="lede">Founder of Poily, the go-to-market platform behind Doerfy, BigTopa, GoalGauntlet and Blending101. My craft is data visualization and UI/UX design, together.</p>
         <p class="signature">Delicious UI/UX. Delectable data visualization. <span>AI is the icing.</span></p>
@@ -524,55 +524,133 @@
     if (!canvas || !canvas.getContext) return;
     var ctx = canvas.getContext('2d');
     var hero = canvas.parentNode;
-    var pts = [], w = 0, h = 0, raf = 0, visible = true;
-    var COLORS = ['#f97316', '#8b7cf6', '#2fc98e', '#f0476a'];
+    var portrait = hero.querySelector('.portrait');
+    var stars = [], anchors = [], w = 0, h = 0, raf = 0, visible = true, mobile = false;
+    var PIN = 'M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7z';
+    var pinPath = window.Path2D ? new Path2D(PIN) : null;
+    // Poily at the centre, the three brand families around it (same colours as the section pins).
+    var DEFS = [
+      { id: 'poily', c: '#8b7cf6', hub: true },
+      { id: 'productivity', c: '#2fc98e' },
+      { id: 'community', c: '#f97316' },
+      { id: 'health', c: '#f0476a' }
+    ];
+
+    function place() {
+      var hr = hero.getBoundingClientRect();
+      var pr = portrait ? portrait.getBoundingClientRect() : { left: w - 200, top: h / 2 - 80, width: 160, height: 160 };
+      var cx = pr.left - hr.left + pr.width / 2, cy = pr.top - hr.top + pr.height / 2, R = pr.width / 2;
+      var pos;
+      if (mobile) {
+        // empty band to the right of the photo
+        var x0 = cx + R + 22, x1 = w - 22, zw = Math.max(x1 - x0, 90), zx = x0 + zw / 2;
+        pos = [
+          [zx + zw * 0.05, cy],
+          [zx - zw * 0.28, cy - R * 0.62],
+          [zx + zw * 0.36, cy - R * 0.38],
+          [zx + zw * 0.12, cy + R * 0.72]
+        ];
+      } else {
+        // around the photo, never toward the text column on the left
+        function at(ang, dist) { return [cx + Math.cos(ang) * dist, cy + Math.sin(ang) * dist]; }
+        pos = [at(-0.15, R + 120), at(-1.3, R + 52), at(0.35, R + 46), at(1.25, R + 60)];
+      }
+      anchors = DEFS.map(function (d, i) {
+        return {
+          c: d.c, hub: !!d.hub,
+          x: Math.min(Math.max(pos[i][0], 24), w - 24), y: Math.min(Math.max(pos[i][1], 30), h - 24),
+          ph: i * 1.7
+        };
+      });
+    }
 
     function size() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = hero.clientWidth; h = hero.clientHeight;
+      w = hero.clientWidth; h = hero.clientHeight; mobile = w <= 860;
       canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.round(Math.min(70, Math.max(24, (w * h) / 16000)));
-      pts = [];
+      var n = Math.round(Math.min(70, Math.max(26, (w * h) / 15000)));
+      stars = [];
       for (var i = 0; i < n; i++) {
-        var poi = i < 8;
-        pts.push({
+        stars.push({
           x: Math.random() * w, y: Math.random() * h,
           vx: (Math.random() - 0.5) * 0.16, vy: (Math.random() - 0.5) * 0.16,
-          r: poi ? 2.6 : 1 + Math.random() * 0.8,
-          c: poi ? COLORS[i % 4] : 'rgba(169,165,198,0.55)',
-          poi: poi, ph: Math.random() * 6.28
+          r: 1 + Math.random() * 1.1, a: 0.45 + Math.random() * 0.4
         });
       }
+      place();
+    }
+
+    function hexA(hex, a) {
+      var n = parseInt(hex.slice(1), 16);
+      return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    }
+
+    function drawPin(x, y, s, col) {
+      ctx.save();
+      ctx.translate(x - 12 * s, y - 22 * s);
+      ctx.scale(s, s);
+      ctx.fillStyle = col;
+      if (pinPath) ctx.fill(pinPath);
+      ctx.fillStyle = '#0c0a1c';
+      ctx.beginPath(); ctx.arc(12, 9, 2.6, 0, 6.2832); ctx.fill();
+      ctx.restore();
     }
 
     function draw(t) {
+      t = t || 0;
       ctx.clearRect(0, 0, w, h);
       var i, j, a, b, dx, dy, d, max = 130;
-      for (i = 0; i < pts.length; i++) {
-        a = pts[i];
+      // background stars and their faint links
+      for (i = 0; i < stars.length; i++) {
+        a = stars[i];
         if (!reduceMotion) {
           a.x += a.vx; a.y += a.vy;
           if (a.x < -10) a.x = w + 10; if (a.x > w + 10) a.x = -10;
           if (a.y < -10) a.y = h + 10; if (a.y > h + 10) a.y = -10;
         }
-        for (j = i + 1; j < pts.length; j++) {
-          b = pts[j]; dx = a.x - b.x; dy = a.y - b.y; d = Math.sqrt(dx * dx + dy * dy);
+        for (j = i + 1; j < stars.length; j++) {
+          b = stars[j]; dx = a.x - b.x; dy = a.y - b.y; d = Math.sqrt(dx * dx + dy * dy);
           if (d < max) {
-            ctx.strokeStyle = 'rgba(139,124,246,' + (0.16 * (1 - d / max)).toFixed(3) + ')';
+            ctx.strokeStyle = 'rgba(139,124,246,' + (0.22 * (1 - d / max)).toFixed(3) + ')';
             ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
       }
-      for (i = 0; i < pts.length; i++) {
-        a = pts[i];
-        if (a.poi) {
-          var glow = 7 + Math.sin((t || 0) / 900 + a.ph) * 3;
-          ctx.globalAlpha = 0.18; ctx.fillStyle = a.c;
-          ctx.beginPath(); ctx.arc(a.x, a.y, glow, 0, 6.2832); ctx.fill();
-          ctx.globalAlpha = 1;
+      for (i = 0; i < stars.length; i++) {
+        a = stars[i];
+        ctx.fillStyle = 'rgba(190,186,220,' + a.a.toFixed(2) + ')';
+        ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
+      }
+      // points of interest: positions bob gently
+      var P = anchors.map(function (n) {
+        var k = reduceMotion ? 0 : 1;
+        return { c: n.c, hub: n.hub, x: n.x + k * Math.sin(t / 2600 + n.ph) * 5, y: n.y + k * Math.cos(t / 3100 + n.ph) * 5, ph: n.ph };
+      });
+      var hub = P[0];
+      for (i = 1; i < P.length; i++) {
+        var g = ctx.createLinearGradient(P[i].x, P[i].y, hub.x, hub.y);
+        g.addColorStop(0, hexA(P[i].c, 0.75)); g.addColorStop(1, hexA(hub.c, 0.75));
+        ctx.strokeStyle = g; ctx.lineWidth = mobile ? 1.2 : 1.5;
+        ctx.beginPath(); ctx.moveTo(P[i].x, P[i].y - (mobile ? 9 : 12)); ctx.lineTo(hub.x, hub.y); ctx.stroke();
+      }
+      var s = mobile ? 0.95 : 1.25;
+      for (i = 0; i < P.length; i++) {
+        a = P[i];
+        var pulse = 1 + (reduceMotion ? 0 : Math.sin(t / 900 + a.ph) * 0.12);
+        var gr = (a.hub ? (mobile ? 26 : 34) : (mobile ? 18 : 24)) * pulse;
+        var gy = a.hub ? a.y : a.y - 10 * s;
+        var rg = ctx.createRadialGradient(a.x, gy, 0, a.x, gy, gr);
+        rg.addColorStop(0, hexA(a.c, 0.55)); rg.addColorStop(1, hexA(a.c, 0));
+        ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(a.x, gy, gr, 0, 6.2832); ctx.fill();
+        if (a.hub) {
+          var r = mobile ? 9 : 12;
+          var sg = ctx.createRadialGradient(a.x - r * 0.35, a.y - r * 0.35, 1, a.x, a.y, r);
+          sg.addColorStop(0, '#d9d2ff'); sg.addColorStop(1, a.c);
+          ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(a.x, a.y, r, 0, 6.2832); ctx.fill();
+        } else {
+          drawPin(a.x, a.y, s, a.c);
         }
-        ctx.fillStyle = a.c; ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.2832); ctx.fill();
       }
       if (!reduceMotion && visible) raf = requestAnimationFrame(draw);
     }
@@ -583,6 +661,7 @@
       clearTimeout(timer);
       timer = setTimeout(function () { cancelAnimationFrame(raf); size(); draw(0); }, 150);
     });
+    window.addEventListener('load', function () { place(); if (reduceMotion) draw(0); });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (e) {
         var now = e[0].isIntersecting;
